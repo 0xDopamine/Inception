@@ -3,10 +3,16 @@ FROM nginx
 
 RUN apt-get -y update && apt-get -y upgrade -y
 
+RUN chmod 777 /etc/nginx/nginx.conf
+
 COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY index.html /usr/share/nginx/html
+COPY certificate.crt /etc/ssl/
 
-EXPOSE 8080
+COPY private.key /etc/ssl/
 
-CMD ["nginx", "-g", "daemon off;"]
+COPY index.html /var/www/html/
+
+EXPOSE 443
+
+CMD ["nginx", "-g", "daemon off;"] 
