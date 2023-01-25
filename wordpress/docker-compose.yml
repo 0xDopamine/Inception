@@ -1,8 +1,31 @@
-version: '3'
+version: "3"
 
 services:
   mysql:
     image: mariadb
-    volumes:
-      - /data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: testDB
+      MYSQL_USER: mbaioumy
+      MYSQL_PASSWORD: password
     restart: always
+  wordpress:
+    image: wordpress:php7.3-fpm-alpine
+    depends_on:
+      - mysql
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      MYSQL_ROOT_PASSWORD: password
+      WORDPRESS_DB_NAME: testWordpressDB
+      WORDPRESS_DB_USER: mbaioumy
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_TABLE_PREFIX: wp_
+    links:
+      - mysql
+    restart: always
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 8080:80
+    links:
+      - wordpress
