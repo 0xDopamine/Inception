@@ -1,14 +1,13 @@
+
 mysqld
 
-mysql -u root
+mysql -u root -e "CREATE USER 'mbaioumy'@'%' IDENTIFIED BY 'admin';
 
-CREATE USER 'mbaioumy'@'localhost' IDENTIFIED BY 'password';
-
-GRANT ALL PRIVILEGES ON *.* TO 'mbaioumy'@'localhost';
+GRANT ALL PRIVILEGES ON *.* TO 'mbaioumy'@''%';
 
 FLUSH PRIVILEGES;
 
 EXIT;
 
-CREATE DATABASE test_db
+CREATE DATABASE test_db"
 
