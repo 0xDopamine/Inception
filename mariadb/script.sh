@@ -1,13 +1,3 @@
-
+# mkdir hh
+mariadb -u root -e "CREATE DATABASE test_db ; CREATE USER 'mbaioumy'@'%' IDENTIFIED BY 'admin' ; GRANT ALL PRIVILEGES ON test_db.* TO 'mbaioumy'@'%'; FLUSH PRIVILEGES;"
 mysqld
-
-mysql -u root -e "CREATE USER 'mbaioumy'@'%' IDENTIFIED BY 'admin';
-
-GRANT ALL PRIVILEGES ON *.* TO 'mbaioumy'@''%';
-
-FLUSH PRIVILEGES;
-
-EXIT;
-
-CREATE DATABASE test_db"
-
