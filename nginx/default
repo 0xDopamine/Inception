@@ -1,0 +1,22 @@
+server {
+    listen 443;
+
+    server_name localhost;
+
+    root /var/www/html/wordpress;
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass wordpress:9000;
+        fast
+    }
+
+    location ! /\.ht {
+        deny all;
+    }
+}

@@ -11,8 +11,10 @@ COPY certificate.crt /etc/ssl/
 
 COPY private.key /etc/ssl/
 
+COPY default /etc/nginx/sites-available/
+
 COPY index.html /var/www/html/
 
 EXPOSE 443
 
-CMD ["nginx", "-g", "daemon off;"] 
+CMD ["nginx", "-g", "daemon off;"]

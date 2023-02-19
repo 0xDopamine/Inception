@@ -2,30 +2,54 @@ version: "3"
 
 services:
   mysql:
-    image: mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: testDB
-      MYSQL_USER: mbaioumy
-      MYSQL_PASSWORD: password
+    build: /Users/mbaioumy/Documents/Inception/mariadb/
     restart: always
+    environment:
+      - MYSQL_ROOT_PASSWOR=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      -  mariadb:/Users/mbaioumy/Documents/Inception/mariadb/script.sh
+    env_file:
+      - .env
   wordpress:
-    image: wordpress:php7.3-fpm-alpine
+    build: ./wordpress/
+    volumes:
+      - wordpress:/var/www/html/
+    env_file:
+      - .env
     depends_on:
       - mysql
     environment:
-      WORDPRESS_DB_HOST: mysql
-      MYSQL_ROOT_PASSWORD: password
-      WORDPRESS_DB_NAME: testWordpressDB
-      WORDPRESS_DB_USER: mbaioumy
-      WORDPRESS_DB_PASSWORD: password
-      WORDPRESS_TABLE_PREFIX: wp_
-    links:
-      - mysql
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+      - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+      - WORDPRESS_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX}
+    ports:
+      - 9000:9000
     restart: always
   nginx:
-    image: nginx:alpine
-    ports:
-      - 8080:80
-    links:
+    depends_on: 
       - wordpress
+    build: /Users/mbaioumy/Documents/Inception/nginx/
+    ports:
+      - 443:443
+    env_file:
+      - .env
+    volumes:
+      - wordpress:/var/www/html
+    restart: always
+
+volumes :
+  mariadb:
+  wordpress:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/mbaioumy/Documents/Inception/data/html
