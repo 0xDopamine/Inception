@@ -2,8 +2,12 @@ FROM debian:buster
 
 RUN apt-get update && apt-get install -y mariadb-server
 
-COPY script.sh ./script.sh
+COPY script ./script
 
-# RUN service mysql start
+COPY 50-server.cnf /etc/mysql/mariadb.conf.d/
 
-CMD ["sh", "script.sh"]
+RUN chmod +x script
+
+RUN ./script
+
+CMD ["mysqld"]

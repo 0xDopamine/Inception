@@ -1,7 +1,8 @@
 version: "3"
 
 services:
-  mysql:
+  mariadb:
+    container_name: mariadb
     build: /Users/mbaioumy/Documents/Inception/mariadb/
     restart: always
     environment:
@@ -10,17 +11,24 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
-      -  mariadb:/Users/mbaioumy/Documents/Inception/mariadb/script.sh
+      -  ex:/Users/mbaioumy/Documents/Inception/mariadb/script.sh
+      -  mariadb:/var/lib/mysql/
     env_file:
       - .env
+    networks:
+      - wordpress
+    init : true
   wordpress:
+    container_name: wordpress
     build: ./wordpress/
     volumes:
-      - wordpress:/var/www/html/
+      - wordpress:/var/www/html/wordpress
     env_file:
       - .env
+    networks:
+      - wordpress
     depends_on:
-      - mysql
+      - mariadb
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -33,23 +41,33 @@ services:
     ports:
       - 9000:9000
     restart: always
+    init : true
   nginx:
+    container_name: nginx
     depends_on: 
       - wordpress
     build: /Users/mbaioumy/Documents/Inception/nginx/
+    networks:
+      - wordpress
     ports:
       - 443:443
     env_file:
       - .env
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/var/www/html/wordpress
     restart: always
+    init : true
+
+networks:
+  wordpress:
+    driver: bridge
 
 volumes :
+  ex:
   mariadb:
   wordpress:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: /Users/mbaioumy/Documents/Inception/data/html
+    # driver: local
+    # driver_opts:
+    #   o: bind
+    #   type: none
+    #   device: /Users/mbaioumy/Documents/Inception/data/html

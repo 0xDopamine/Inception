@@ -1,19 +1,19 @@
 
-FROM nginx
+FROM debian:buster
 
-RUN apt-get -y update && apt-get -y upgrade -y
+RUN apt-get -y update && apt-get -y upgrade && apt install -y nginx
 
-RUN chmod 777 /etc/nginx/nginx.conf
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# COPY nginx.conf /etc/nginx/nginx.conf
 
 COPY certificate.crt /etc/ssl/
 
 COPY private.key /etc/ssl/
 
-COPY default /etc/nginx/sites-available/
+COPY default.conf /etc/nginx/conf.d/
 
-COPY index.html /var/www/html/
+RUN chmod 777 /etc/nginx/conf.d/default.conf
+# COPY index.html /var/www/html/
 
 EXPOSE 443
 
