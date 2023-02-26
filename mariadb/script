@@ -1,8 +1,0 @@
-service mysql start 
-mariadb -u root -e "CREATE DATABASE test_db ; CREATE USER 'mbaioumy'@'%' IDENTIFIED BY 'admin' 
-; GRANT ALL PRIVILEGES ON test_db.* TO 'mbaioumy'@'%'; FLUSH PRIVILEGES;"
-mariadb -u root -e "ALTER USER 'root'@'%' IDENTIFY BY 'new_password'; FLUSH PRIVILEGES;"
-# mysqladmin -u root -p new_password shutdown
-# mysqld_safe
-
-exec $@
