@@ -62,6 +62,5 @@ networks:
     driver: bridge
 
 volumes :
-  ex:
   mariadb:
   wordpress:

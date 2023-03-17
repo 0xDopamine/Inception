@@ -10,4 +10,4 @@ RUN chmod +x script
 
 RUN ./script
 
-CMD ["mysqld"]
+CMD ["mysqld", "--skip_networking=false"]
