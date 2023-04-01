@@ -43,7 +43,7 @@ services:
     init : true
   nginx:
     container_name: nginx
-    depends_on: 
+    depends_on:
       - wordpress
     build: ./requirements/nginx/
     networks:
@@ -62,5 +62,15 @@ networks:
     driver: bridge
 
 volumes :
-  mariadb:
   wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/mbaioumy/data/wordpress
+      o: bind
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/mbaioumy/data/mariadb
+      o: bind
